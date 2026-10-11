@@ -1,7 +1,6 @@
 import { exec, spawn, toast } from 'kernelsu-alt';
 import { WebUI, Intent } from 'webuix'
 import { getString } from './language.js';
-import { pushBackState, consumeBackState } from './backstack.js';
 
 export let developerOption = false;
 export function setDeveloperOption(value) { developerOption = value; }
@@ -160,7 +159,6 @@ export function runReSuSFS(...args) {
         terminal.scrollTo({ top: terminal.scrollHeight, behavior: 'smooth' });
     };
 
-    consumeBackState();
     const closeTerminal = () => {
         if (!isTerminalOpen) return;
         terminal.close();
@@ -171,7 +169,6 @@ export function runReSuSFS(...args) {
     };
 
     setTimeout(() => {
-        pushBackState(() => closeTerminal());
         isTerminalOpen = true;
         terminal.open();
         closeBtn.classList.remove('show');

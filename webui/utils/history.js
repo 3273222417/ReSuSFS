@@ -159,3 +159,14 @@ export function registerManagedPanel(panel, handlers) {
         requestLayerClose(panel.__historyLayer);
     };
 }
+
+export function registerManagedSlideMenu(panel) {
+    if (panel.__historyManaged) return;
+    const originalOpen = panel.open.bind(panel);
+    const originalClose = panel.close.bind(panel);
+    registerManagedPanel(panel, {
+        open: originalOpen,
+        close: originalClose,
+        isOpen: () => panel.classList.contains('open'),
+    });
+}
