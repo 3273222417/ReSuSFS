@@ -5,10 +5,16 @@ import { StreamLanguage, HighlightStyle, syntaxHighlighting } from '@codemirror/
 import { shell } from '@codemirror/legacy-modes/mode/shell';
 import { tags as t } from '@lezer/highlight';
 
+import { updateUIVisibility } from './util.js';
+import { keepLayerOpen } from './history.js';
+
 let setupEditor = false;
 let codeEditor;
 let lineWrappingEnabled = false;
 let onSaveCallback = null;
+let savedContent = '';
+let dialogWired = false;
+let forceDiscardNext = false;
 const lineWrapping = new Compartment();
 const language = new Compartment();
 
@@ -25,13 +31,6 @@ const materialHighlightStyle = HighlightStyle.define([
     { tag: t.meta, color: 'var(--md-sys-color-outline)' },
 ]);
 
-/**
- * Pick a language extension based on the file being edited. Shell mode
- * works well for both real .sh scripts and our config files, since they
- * both use "#" comments and quoted paths.
- * @param {string} displayName
- * @returns {import('@codemirror/state').Extension}
- */
 function languageForFile(displayName) {
     return shellLanguage;
 }
@@ -108,16 +107,73 @@ function forceEditorLayout() {
     }
 }
 
-export function closeEditor() {
+function isDirty() {
+    if (!codeEditor) return false;
+    return codeEditor.state.doc.toString() !== savedContent;
+}
+
+function forceCloseEditor() {
     const editor = document.getElementById('edit-content');
     const activePage = document.querySelector('.body-content[data-active="true"]');
     if (!editor.classList.contains('open') && !document.body.classList.contains('editor-active')) return;
 
-    editor.close();
+    editor.classList.add('animation');
+    activePage?.classList.add('animation');
+    editor.classList.remove('open');
+    activePage?.classList.remove('menu-open');
+    updateUIVisibility('edit-content', false);
+
     document.body.classList.remove('editor-active');
     if (activePage) activePage.style.overflowY = 'auto';
     codeEditor?.scrollTo(0, 0);
     onSaveCallback = null;
+
+    const fileNameInput = document.getElementById('file-name-input');
+    const fileNameEditor = document.querySelector('.file-name-editor');
+    if (fileNameEditor) fileNameEditor.querySelectorAll('span').forEach(span => span.style.display = '');
+    if (fileNameInput) {
+        fileNameInput.value = '';
+        fileNameInput.readOnly = false;
+        fileNameInput.style.width = '';
+    }
+}
+
+async function saveAndClose() {
+    if (onSaveCallback) await onSaveCallback(codeEditor.state.doc.toString());
+    savedContent = codeEditor.state.doc.toString();
+    document.getElementById('edit-content')?.close();
+}
+
+function ensureUnsavedDialogWired() {
+    if (dialogWired) return;
+    dialogWired = true;
+
+    const dialog = document.getElementById('unsaved-changes-dialog');
+    const saveBtn = document.getElementById('unsaved-save-btn');
+    const discardBtn = document.getElementById('unsaved-discard-btn');
+    const continueBtn = document.getElementById('unsaved-continue-btn');
+
+    saveBtn.onclick = async () => {
+        dialog.close();
+        await saveAndClose();
+    };
+    discardBtn.onclick = () => {
+        dialog.close();
+        forceDiscardNext = true;
+        document.getElementById('edit-content')?.close();
+    };
+    continueBtn.onclick = () => dialog.close();
+}
+
+export function closeEditor() {
+    if (isDirty() && !forceDiscardNext) {
+        ensureUnsavedDialogWired();
+        document.getElementById('unsaved-changes-dialog')?.show();
+        keepLayerOpen(document.getElementById('edit-content'));
+        return;
+    }
+    forceDiscardNext = false;
+    forceCloseEditor();
 }
 
 export function openEditor(displayName, content, onSave) {
@@ -136,6 +192,7 @@ export function openEditor(displayName, content, onSave) {
     fileNameInput.style.width = 'auto';
 
     onSaveCallback = onSave;
+    savedContent = content;
     const langExtension = languageForFile(displayName);
 
     if (!setupEditor) {
@@ -162,10 +219,7 @@ export function openEditor(displayName, content, onSave) {
         setEditorValue(content);
     }
 
-    saveButton.onclick = async () => {
-        if (onSaveCallback) await onSaveCallback(codeEditor.state.doc.toString());
-        closeEditor();
-    };
+    saveButton.onclick = () => saveAndClose();
     lineWrapButton.onclick = () => setLineWrapping(!lineWrappingEnabled);
 
     document.body.classList.add('editor-active');
@@ -176,5 +230,5 @@ export function openEditor(displayName, content, onSave) {
         codeEditor.requestMeasure();
         forceEditorLayout();
     });
-    backButton.onclick = () => closeEditor();
+    backButton.onclick = () => editor.close();
 }

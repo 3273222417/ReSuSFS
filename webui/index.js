@@ -2,6 +2,7 @@ import { initializeLogCatcher } from './utils/log_catcher.js';
 import { checkMMRL, setupSlideMenu, reboot } from './utils/util.js';
 import { loadTranslations } from './utils/language.js';
 import { closeTopManagedLayer, hasManagedHistoryLayer, registerManagedDialog, registerManagedSlideMenu } from './utils/history.js';
+import { closeEditor } from './utils/editor.js';
 import { router } from './route.js';
 import { exec } from 'kernelsu-alt';
 import { WXEventHandler } from "webuix";
@@ -188,7 +189,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.querySelectorAll('[unresolved]').forEach(el => el.removeAttribute('unresolved'));
     checkMMRL();
     setupSlideMenu();
-    document.querySelectorAll('.slide-menu').forEach(registerManagedSlideMenu);
+    document.querySelectorAll('.slide-menu').forEach(panel => {
+        if (panel.id === 'edit-content') {
+            registerManagedSlideMenu(panel, { close: closeEditor });
+        } else {
+            registerManagedSlideMenu(panel);
+        }
+    });
     router.navigate('home');
     setupUserCustomization();
     setupRebootButton();

@@ -60,7 +60,10 @@ function applyHistoryDepth(targetDepth) {
     applyingHistory = true;
 
     while (managedLayers.length > targetDepth) {
+        const lengthBefore = managedLayers.length;
         removeTopLayer();
+
+        if (managedLayers.length >= lengthBefore) break;
     }
 
     applyingHistory = false;
@@ -137,6 +140,7 @@ export function registerManagedPanel(panel, handlers) {
     ensureBaseHistoryState();
     if (panel.__historyManaged) return;
     panel.__historyManaged = true;
+    panel.__historyHandlers = handlers;
 
     panel.open = () => {
         if (panel.__historyLayer || handlers.isOpen()) return;
@@ -160,13 +164,27 @@ export function registerManagedPanel(panel, handlers) {
     };
 }
 
-export function registerManagedSlideMenu(panel) {
+export function keepLayerOpen(panel) {
+    const handlers = panel.__historyHandlers;
+    if (!handlers) return;
+    const layer = createManagedLayer(panel, {
+        onActivate: () => {},
+        onDeactivate: () => {
+            if (handlers.isOpen()) handlers.close();
+        },
+    });
+    managedLayers.push(layer);
+    panel.__historyLayer = layer;
+    window.history.pushState({ __ReSuSFSUiHistory: true, depth: managedLayers.length }, "");
+}
+
+export function registerManagedSlideMenu(panel, overrides = {}) {
     if (panel.__historyManaged) return;
     const originalOpen = panel.open.bind(panel);
     const originalClose = panel.close.bind(panel);
     registerManagedPanel(panel, {
         open: originalOpen,
-        close: originalClose,
+        close: overrides.close || originalClose,
         isOpen: () => panel.classList.contains('open'),
     });
 }

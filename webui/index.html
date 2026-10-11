@@ -233,6 +233,18 @@
                 <md-filled-button id="tag-edit-save" data-i18n="global_confirm"></md-filled-button>
             </div>
         </md-dialog>
+        <!-- Unsaved changes confirmation (shared editor) -->
+        <md-dialog id="unsaved-changes-dialog">
+            <div slot="headline" data-i18n="editor_unsaved_title"></div>
+            <div slot="content">
+                <p data-i18n="editor_unsaved_message"></p>
+            </div>
+            <div slot="actions">
+                <md-text-button id="unsaved-discard-btn" data-i18n="editor_discard"></md-text-button>
+                <md-text-button id="unsaved-continue-btn" data-i18n="global_cancel"></md-text-button>
+                <md-filled-button id="unsaved-save-btn" data-i18n="global_confirm"></md-filled-button>
+            </div>
+        </md-dialog>
 
         <!-- Language -->
         <md-dialog id="language-overlay">
