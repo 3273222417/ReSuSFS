@@ -187,9 +187,9 @@
 > To protect your device and ensure you receive official support:
 >
 > - Use **KernelSU**: The upstream, official root solution.
-> - Use **ReSukiSU**: A trusted, community-respected fork.
+> - Use **BakaSU**: A trusted, community-respected fork.
 >
-> ReSuSFS is the only official SuSFS module for KernelSU. It is fully supported on KernelSU and ReSukiSU only.
+> ReSuSFS is the only official SuSFS module for KernelSU. It is fully supported on KernelSU and BakaSU only.
 >
 > Do not use KernelSU Next. Choose stability. Choose freedom. Choose official support.
 

@@ -11,7 +11,7 @@
 [![GitHub License](https://img.shields.io/github/license/ahmed-alnassif/ReSuSFS?logo=gnu)](/LICENSE)
 [![SuSFS](https://img.shields.io/badge/SuSFS-4CAF50?&logo=gitlab&logoColor=white)](https://gitlab.com/simonpunk/susfs4ksu)
 [![KernelSU](https://img.shields.io/badge/KernelSU-000000?&logo=github&logoColor=white)](https://github.com/tiann/KernelSU)
-[![ReSukiSU](https://img.shields.io/badge/ReSukiSU-E91E63?&logo=github&logoColor=white)](https://github.com/ReSukiSU/ReSukiSU)
+[![BakaSU](https://img.shields.io/badge/BakaSU-E91E63?&logo=github&logoColor=white)](https://github.com/Baka-SU/BakaSU)
 [![Translation status](https://img.shields.io/weblate/progress/resusfs)](https://hosted.weblate.org/engage/ReSuSFS/)
 
 Root hiding made simple, powerful when you need it. A [KernelSU](https://kernelsu.org) module and WebUI that turns SuSFS into clean config files and toggle switches for everyday use, with **strong hiding applied out of the box** via built-in spoofing and hiding scripts for one-tap protection, plus a script manager for power users who want more, all without leaving the WebUI.
@@ -31,9 +31,9 @@ Root hiding made simple, powerful when you need it. A [KernelSU](https://kernels
 > To protect your device and ensure you receive official support:
 >
 > - Use **KernelSU**: The upstream, official root solution.
-> - Use **ReSukiSU**: A trusted, community-respected fork.
+> - Use **BakaSU**: A trusted, community-respected fork.
 >
-> ReSuSFS is the only official SuSFS module for KernelSU. It is fully supported on KernelSU and ReSukiSU only.
+> ReSuSFS is the only official SuSFS module for KernelSU. It is fully supported on KernelSU and BakaSU only.
 >
 > Do not use KernelSU Next. Choose stability. Choose freedom. Choose official support.
 
