@@ -1,4 +1,24 @@
 
+## [v26.10.11] - 2026-10-11
+
+
+### ✨ Features
+
+- add module.yaml to add ReSuSFS to KernelSU manger (@ahmed-alnassif)
+
+### 🔧 Fixes
+
+- back button now works correctly for menus and dialogs (@ahmed-alnassif)
+- one asset per release (@ahmed-alnassif)
+
+### 📚 Documentation
+
+- migrate ReSukiSU to BakaSU (@ahmed-alnassif)
+
+### 🧹 Chores
+
+- bump version to v26.10.11 (@ahmed-alnassif)
+
 ## [v2.3.0-f55930f] - 2026-10-05
 
 
