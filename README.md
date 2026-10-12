@@ -1,6 +1,7 @@
 # ReSuSFS
 
 <p align="center">
+  <img src="docs/logo.png" width="50%" alt="ReSuSFS Logo">
   <img src="docs/banner.png" alt="ReSuSFS Banner">
 </p>
 
