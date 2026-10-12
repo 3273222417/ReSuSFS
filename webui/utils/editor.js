@@ -166,9 +166,15 @@ function ensureUnsavedDialogWired() {
 }
 
 export function closeEditor() {
+    const dialog = document.getElementById('unsaved-changes-dialog');
+
     if (isDirty() && !forceDiscardNext) {
         ensureUnsavedDialogWired();
-        document.getElementById('unsaved-changes-dialog')?.show();
+        if (dialog?.open) {
+            dialog.close();
+        } else {
+            dialog?.show();
+        }
         keepLayerOpen(document.getElementById('edit-content'));
         return;
     }
