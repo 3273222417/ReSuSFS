@@ -8,12 +8,11 @@ license: GPL-3.0-only
 homepage: https://github.com/ahmed-alnassif/ReSuSFS
 support: https://github.com/ahmed-alnassif/ReSuSFS/issues
 tags:
-  - kernelsu
+  - automate
+  - freedom
   - susfs
   - root-hiding
-  - webui
-  - system
-  - automate
+icon: assets/icon.png
 metamodule: false
 authors:
   - name: ahmed-alnassif
