@@ -28,7 +28,15 @@ detect_key_press() {
 	fi
 }
 
-if [ -d "$PERSISTENT_DIR" ]; then
+CONFIGURE=true
+ui_print "[*] Will select NO in 6s if no volume buttons pressed"
+ui_print "[*] Do you want to update the configs?"
+ui_print "[*] VOLUME UP for NO, DOWN for YES"
+if detect_key_press; then
+	CONFIGURE=false
+fi
+
+if [ -d "$PERSISTENT_DIR" ] && $CONFIGURE; then
 	ui_print "[*] Have you backed up your configuration?"
 	ui_print "[*] VOLUME UP for YES, DOWN for NO"
 	if ! detect_key_press; then
@@ -76,13 +84,15 @@ handle_files() {
 	fi
 }
 
-handle_files "$CONFIG_DIR" "$PERSISTENT_DIR" "scripts_bootcompleted.txt scripts_postfs.txt" "updated"
-if [ -d "$CONFIG_DIR/scripts" ]; then
-	handle_files "$CONFIG_DIR/scripts" "$PERSISTENT_DIR/scripts" "$(get_all_files "$CONFIG_DIR/scripts")" "updated"
-fi
+if $CONFIGURE; then
+	handle_files "$CONFIG_DIR" "$PERSISTENT_DIR" "scripts_bootcompleted.txt scripts_postfs.txt" "updated"
+	if [ -d "$CONFIG_DIR/scripts" ]; then
+		handle_files "$CONFIG_DIR/scripts" "$PERSISTENT_DIR/scripts" "$(get_all_files "$CONFIG_DIR/scripts")" "updated"
+	fi
 
-CONFIG_FILES=$(get_all_files "$CONFIG_DIR" | grep -v '^scripts/')
-[ -n "$CONFIG_FILES" ] && handle_files "$CONFIG_DIR" "$PERSISTENT_DIR" "$CONFIG_FILES" "reset"
+	CONFIG_FILES=$(get_all_files "$CONFIG_DIR" | grep -v '^scripts/')
+	[ -n "$CONFIG_FILES" ] && handle_files "$CONFIG_DIR" "$PERSISTENT_DIR" "$CONFIG_FILES" "reset"
+fi
 
 rm -rf "$CONFIG_DIR"
 
