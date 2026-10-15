@@ -10,8 +10,8 @@ settings put global adb_enabled 0
 settings put global adb_wifi_enabled 0
 settings put global package_verifier_enable 1
 settings put global verifier_verify_adb_installs 1
-settings put global hidden_api_policy 0
 settings put global usb_mass_storage_enabled 0
+settings delete global hidden_api_policy
 
 [ "$(getenforce)" != "Enforcing" ] && setenforce 1
 
